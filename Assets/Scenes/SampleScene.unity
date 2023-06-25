@@ -328,6 +328,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _displayTarget: {fileID: 2071598607}
   _fill: {fileID: 43816214}
+  _maxHealthAttributeTemplate: {fileID: 11400000, guid: 3b2c02143236a48b4944a92e2cc55db0, type: 2}
+  _healthAttributeTemplate: {fileID: 11400000, guid: d61a11cb770fd4a5a834d29618e46a44, type: 2}
 --- !u!1 &406979268
 GameObject:
   m_ObjectHideFlags: 0

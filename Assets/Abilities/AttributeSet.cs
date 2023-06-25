@@ -4,7 +4,7 @@ using System.Collections;
 namespace Abilities
 {
     [CreateAssetMenu(menuName = "Ability/AttributeSet")]
-	public class AttributeSet : ScriptableObject
+	public class AttributeSet : ScriptableObject, IEnumerable
 	{
 		[SerializeField]
 		private Attribute[] _attributes;
@@ -75,6 +75,11 @@ namespace Abilities
             }
             return null;
         }
+
+		public IEnumerator GetEnumerator()
+		{
+            return _attributes.GetEnumerator();
+		}
 	}
 
 }

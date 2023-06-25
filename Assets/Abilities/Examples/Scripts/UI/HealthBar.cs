@@ -15,25 +15,30 @@ namespace Abilities.Examples.Scripts.Executions
 
 		[SerializeField]
 		private Attribute _maxHealthAttributeTemplate;
+
+		[SerializeField]
+		private Attribute _healthAttributeTemplate;
 		private FloatAttribute _maxHealthAttribute;
+		private AbilityComponent.AttributeChangeListenerHandle _healthChangeHandle;
 
-
-		private void Awake()
+		private void Start()
 		{
-			_maxHealthAttribute = _maxHealthAttribute = _maxHealthAttribute = _displayTarget.AttributeSet.GetAttributeFromTemplate<FloatAttribute>(_maxHealthAttribute);
+			_maxHealthAttribute = _displayTarget.AttributeSet.GetAttributeFromTemplate<FloatAttribute>(_maxHealthAttributeTemplate);
 		}
+
+		private void OnHealthChanged(AbilityComponent.AttributeChangePayload payload)
+		{
+			_fill.transform.localScale = new Vector3(payload.ReadNewValue<float>() / _maxHealthAttribute.Value, 1, 1);
+		}
+
 		private void OnEnable()
 		{
-			_displayTarget.AttributeSet.GetAttribute<HealthAttribute>().ValueChanged += OnHealthChanged;
+			_healthChangeHandle = _displayTarget.RegisterAttributeChangeEvent(_healthAttributeTemplate, OnHealthChanged);
 		}
 		private void OnDisable()
 		{
-			_displayTarget.AttributeSet.GetAttribute<HealthAttribute>().ValueChanged -= OnHealthChanged;
+			_displayTarget.UnregisterAttributeChangeEvent(_healthChangeHandle);
 		}
 
-		private void OnHealthChanged(float val, float prev)
-		{
-			_fill.transform.localScale = new Vector3(val / _maxHealthAttribute.Value, 1, 1);
-		}
 	}
 }

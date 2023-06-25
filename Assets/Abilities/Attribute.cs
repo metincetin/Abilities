@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using UnityEngine.UIElements;
+using TMPro;
 
 namespace Abilities
 {
@@ -15,6 +16,13 @@ namespace Abilities
 			inst._template = this;
 			return inst;
 		}
+
+		public event Action<object, object> GenericValueChanged;
+
+		protected void InvokeGenericValueChangedEvent(object newValue, object previousValue)
+		{
+			GenericValueChanged?.Invoke(newValue, previousValue);
+		}
 	}
 
 	public abstract class Attribute<T> : Attribute
@@ -23,18 +31,19 @@ namespace Abilities
 		protected T _value;
 
 		public T Value
-        {
+		{
 			get => _value;
-            set
-            {
+			set
+			{
 				var oldValue = _value;
 
 				_value = PostProcessValue(value);
 
 				OnValueUpdated();
 				ValueChanged?.Invoke(_value, oldValue);
-            }
-        }
+				InvokeGenericValueChangedEvent(_value, oldValue);
+			}
+		}
 
 		/// <summary>
 		/// Process the value before it is applied to the attribute. Can be used for clamping
