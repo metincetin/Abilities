@@ -9,6 +9,7 @@ namespace Abilities
     {
         private List<Ability> _activeAbilities = new List<Ability>();
         private StackTree _stackTree = new StackTree();
+        public StackTree StackTree => _stackTree;
 
         [SerializeField]
         private AttributeSet _attributeSet;
@@ -42,12 +43,12 @@ namespace Abilities
             if (_activeAbilities.Remove(ability))
                 Destroy(ability);
         }
-
+        
         public Ability GetAbility(Ability ability)
         {
             foreach (var a in _activeAbilities)
             {
-                if (ability.GetType() == a.GetType())
+                if (ability.Template == a.Template)
                 {
                     return a;
                 }
@@ -59,7 +60,7 @@ namespace Abilities
         {
             foreach(var a in _activeAbilities)
             {
-                if (ability.GetType() == a.GetType())
+				if (ability.Template == a.Template)
                 {
                     return true;
                 }

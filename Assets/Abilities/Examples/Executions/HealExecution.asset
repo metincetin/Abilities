@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: HealExecution
   m_EditorClassIdentifier: 
   Value: 100
+  MultiplyWithDeltaTime: 1

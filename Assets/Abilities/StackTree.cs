@@ -8,6 +8,34 @@ namespace Abilities
         private List<Effect> _effects = new List<Effect>();
         private List<Effect> _removalQueue = new List<Effect>();
 
+
+        public Effect Fetch(Effect effect)
+        {
+            return Fetch<Effect>(effect);
+        }
+        public T Fetch<T>() where T: Effect
+        {
+            foreach(var e in _effects)
+            {
+                if (e is T casted)
+                {
+                    return casted;
+                }
+            }
+            return null;
+        }
+        public T Fetch<T>(Effect template) where T: Effect
+        {
+            foreach(var e in _effects)
+            {
+                if (e.Template == template && e is T casted)
+                {
+                    return casted;
+                }
+            }
+            return null;
+        }
+
         public void Add(Effect effect)
         {
             _effects.Add(effect);

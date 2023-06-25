@@ -16,7 +16,7 @@ namespace Abilities
             for (int i = 0; i < _attributes.Length; i++)
             {
                 Attribute a = _attributes[i];
-                var n = Instantiate(a);
+				var n = a.CreateInstance();
                 n.name = a.name;
                 _attributes[i] = n;
             }
@@ -26,7 +26,7 @@ namespace Abilities
         {
 	        foreach (var a in _attributes)
 	        {
-		        if (a.GetType() == template.GetType())
+		        if (a.Template == template)
 		        {
 			        return a;
 		        }

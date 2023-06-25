@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Health
   m_EditorClassIdentifier: 
   _value: 1500
+  _clampTo: {fileID: 11400000, guid: 3b2c02143236a48b4944a92e2cc55db0, type: 2}
