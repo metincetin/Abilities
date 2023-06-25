@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Abilities
 {
-    public class StackTree
+	public class StackTree : IEnumerable
     {
         private List<Effect> _effects = new List<Effect>();
         private List<Effect> _removalQueue = new List<Effect>();
 
+        public int ActiveEffectCount => _effects.Count;
 
-        public Effect Fetch(Effect effect)
+		public Effect Fetch(Effect effect)
         {
             return Fetch<Effect>(effect);
         }
@@ -82,6 +84,11 @@ namespace Abilities
             }
             _removalQueue.Clear();
         }
-    }
+
+		public IEnumerator GetEnumerator()
+		{
+            return _effects.GetEnumerator();
+		}
+	}
 }
 

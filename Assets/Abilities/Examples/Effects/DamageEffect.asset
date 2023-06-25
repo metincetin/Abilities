@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   executions:
   - {fileID: 11400000, guid: ce618148c1f65428083d602f798af48d, type: 2}
-  _durationType: 1
+  _durationType: 0
   _duration: 2
   _period: 0
   _periodDelay: 0

@@ -15,7 +15,9 @@ namespace Abilities
         /// </summary>
         public abstract float Cooldown { get; }
 
-        
+
+        public bool IsTemplate => _template == null;
+
 		private Ability _template;
 
         /// <summary>

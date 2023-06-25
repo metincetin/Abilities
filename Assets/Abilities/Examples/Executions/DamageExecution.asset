@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: DamageExecution
   m_EditorClassIdentifier: 
   _attributeName: Health
-  _value: 1
+  _value: 100
