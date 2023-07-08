@@ -6,7 +6,7 @@ namespace Abilities
     /// <summary>
     /// Abstract ability class. Abilities should extend from this. Ability behaviour should be done in OnActivated, and reverted on OnEnded (if necessary)
     /// </summary>
-    public abstract class Ability: ScriptableObject
+    public abstract class Ability : ScriptableObject
     {
         public AbilityComponent Owner { get; private set; }
 
@@ -18,15 +18,16 @@ namespace Abilities
 
         public bool IsTemplate => _template == null;
 
-		private Ability _template;
+        private Ability _template;
 
         /// <summary>
         /// Represents the scriptable object that this ability instantiated from.
         /// </summary>
         public Ability Template => _template;
 
-        
-        public Ability Instantiate(AbilityComponent owner) {
+
+        public Ability Instantiate(AbilityComponent owner)
+        {
             var inst = Instantiate(this);
             inst.Owner = owner;
             inst._template = this;

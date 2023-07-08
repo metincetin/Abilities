@@ -41,6 +41,7 @@ namespace Abilities
         public void Add(Effect effect)
         {
             _effects.Add(effect);
+            effect.OnAdded_Internal();
         }
 
         public void Update(float delta)
@@ -54,14 +55,7 @@ namespace Abilities
                         break;
                     case DurationType.Durational:
                     case DurationType.Infinite:
-                        if (e.Period > 0)
-                        {
-                            if (e.Time % e.Period < 0.001)
-                            {
-                                e.Execute();
-                            }
-                        }
-                        else
+                        if (e.Period == 0)
                         {
                             e.Execute();
                         }
@@ -79,10 +73,17 @@ namespace Abilities
 
             foreach (var r in _removalQueue)
             {
-                _effects.Remove(r);
+                Remove(r);
                 UnityEngine.Object.Destroy(r);
             }
             _removalQueue.Clear();
+        }
+        public void Remove(Effect effect)
+        {
+            if (_effects.Remove(effect))
+            {
+                effect.OnRemoved_Internal();
+            }
         }
 
 		public IEnumerator GetEnumerator()

@@ -15,8 +15,5 @@ namespace Abilities.Examples.Scripts.Effects
 
         [SerializeField] private float _period;
         public override float Period => _period;
-
-        [SerializeField] private float _periodDelay;
-        public override float PeriodDelay => _periodDelay;
     }
 }

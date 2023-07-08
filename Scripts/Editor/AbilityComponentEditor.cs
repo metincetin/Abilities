@@ -11,8 +11,18 @@ namespace Abilities.Editor
 		{
 			base.OnInspectorGUI();
 			var t = target as AbilityComponent;
+
+      if (!t.AttributeSet)
+      {
+                var rect = EditorGUILayout.GetControlRect();
+                EditorGUI.HelpBox(rect, "Debugging is disabled for this component as AttributeSet is null", MessageType.Info);
+                return;
+      }
+
+
 			EditorGUILayout.LabelField("Attributes");
 			EditorGUI.indentLevel++;
+
 			foreach (Attribute attr in t.AttributeSet)
 			{
 				var val = attr.GetType().GetProperty("Value");

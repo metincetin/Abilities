@@ -10,7 +10,7 @@ namespace Abilities.Examples.Scripts.Executions
         public override void Execute(Effect effect)
         {
             var health = effect.Applied.AttributeSet.GetAttributeByName<HealthAttribute>("Health");
-            health.Value += Value * (MultiplyWithDeltaTime ? 1 : Time.deltaTime);
+            health.Value += Value * (MultiplyWithDeltaTime ? Time.deltaTime : 1);
         }
     }
 }
