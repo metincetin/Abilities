@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e35735effcf847478364e8ba9fcf1b77, type: 3}
-  m_Name: HealExecution
+  m_Script: {fileID: 11500000, guid: efbe70e5c1af324a08d1a21f6c377990, type: 3}
+  m_Name: TestAbility
   m_EditorClassIdentifier: 
-  Value: 100
-  MultiplyWithDeltaTime: 0

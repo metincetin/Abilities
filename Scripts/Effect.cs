@@ -44,7 +44,7 @@ namespace Abilities
         [SerializeField, Tooltip("Handles how visual destruction will be handled.\nNone: No destruction will happen. You'll have to manually control its lifetime after it's added.\nDestroy: Visual will be destroyed after effect is removed.\nMessage: Message will be send when effect is removed.")]
         private VisualDestructionHandling _visualDestructionHandling = VisualDestructionHandling.Destroy;
 
-        [SerializeField, Tooltip("Message to be sent to visual instance when effect is removed")]
+        [SerializeField, Tooltip("Message to be sent to visual instance when effect is removed. Used with VisualDestructionHandling.Message")]
         private string _destructionMessage;
 
 

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Abilities
 {
     /// <summary>
-    /// Abstract ability class. Abilities should extend from this. Ability behaviour should be done in OnActivated, and reverted on OnEnded (if necessary)
+    /// Abstract ability class. Abilities should extend from this. Ability behaviour should be done in OnActivated and OnUpdated, and reverted on OnEnded (if necessary)
     /// </summary>
     public abstract class Ability : ScriptableObject
     {
@@ -26,6 +26,8 @@ namespace Abilities
         public Ability Template => _template;
 
 
+
+
         public Ability Instantiate(AbilityComponent owner)
         {
             var inst = Instantiate(this);
@@ -34,9 +36,12 @@ namespace Abilities
             return inst;
         }
 
-        public bool CanBeActivated(AbilityComponent target)
+        /// <summary>
+        /// Returns true if ability is valid to be activated.
+        /// </summary>
+        public virtual bool CanBeActivated(AbilityComponent owner)
         {
-            return true;
+            return owner.GetCooldown(this) <= 0;
         }
 
 
@@ -49,12 +54,21 @@ namespace Abilities
         }
 
         /// <summary>
-        /// Deactivate this ability and remove from its owner.
+        /// Deactivate this ability and remove from its owner adding cooldown.
         /// </summary>
         public void End()
         {
             Owner.RemoveAbility(this);
+            if (Cooldown > 0)
+            {
+                Owner.AddCooldown(Template);
+            }
             OnEnded();
+        }
+
+        public void Update()
+        {
+            OnUpdated();
         }
 
 
@@ -62,6 +76,11 @@ namespace Abilities
         /// Called when this ability is activated. Implement your ability behaviour here
         /// </summary>
         protected abstract void OnActivated();
+
+        /// <summary>
+        /// Called every frame after this ability is activated. Implement your ability's update behaviour here
+        /// </summary>
+        protected abstract void OnUpdated();
 
         /// <summary>
         /// Called when this ability ends. Revert your ability behaviour here

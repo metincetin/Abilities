@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7f73ae3da064e37b8b1c74a75eb40b, type: 3}
   m_Name: HealEffect
   m_EditorClassIdentifier: 
+  _targetVisual: {fileID: 1167189899449453827, guid: fd47e1f8f02b7506093e8aad08e21114,
+    type: 3}
+  _visualDestructionHandling: 2
+  _destructionMessage: Hello
   executions:
   - {fileID: 11400000, guid: 2032ce853dc004b588a11b1a6e7b49b1, type: 2}
   _durationType: 1
   _duration: 1
   _period: 0.2
-  _periodDelay: 0

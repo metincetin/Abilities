@@ -11,6 +11,8 @@ namespace Abilities
         private StackTree _stackTree = new StackTree();
         public StackTree StackTree => _stackTree;
 
+        private List<Cooldown> _cooldowns = new List<Cooldown>();
+
         [SerializeField]
         private AttributeSet _attributeSet;
         public AttributeSet AttributeSet => _attributeSet;
@@ -44,20 +46,66 @@ namespace Abilities
             }
         }
 
-        public bool TryActivateAbility(Ability ability)
+        public bool TryActivateAbility(Ability template)
         {
-            if (ability.CanBeActivated(this))
+            if (GetActiveAbilityInstanceOfTemplate(template)) return false;
+            if (template.CanBeActivated(this))
             {
-                ActivateAbility(ability);
+                ActivateAbility(template);
                 return true;
             }
             return false;
+        }
+
+        private Ability GetActiveAbilityInstanceOfTemplate(Ability template)
+        {
+            foreach(var a in _activeAbilities)
+            {
+                if (a.Template == template) return a;
+            }
+
+            return null;
+        }
+
+        public void AddCooldown(Ability template)
+        {
+            if (!template.IsTemplate)
+            {
+                template = template.Template;
+            }
+
+            foreach(var c in _cooldowns)
+            {
+                if (c.Template == template)
+                {
+                    c.RemainingCooldown += template.Cooldown;
+                    return;
+                }
+            }
+
+            _cooldowns.Add(new Cooldown(template));
+        }
+
+        public float GetCooldown(Ability template)
+        {
+            if (!template.IsTemplate)
+            {
+                template = template.Template;
+            }
+
+            foreach(var c in _cooldowns)
+            {
+                if (c.Template != template) continue;
+                return c.RemainingCooldown;
+            }
+            return 0;
         }
 
         private void ActivateAbility(Ability ability)
         {
             var abilityInstance = ability.Instantiate(this);
             abilityInstance.Activate();
+            _activeAbilities.Add(abilityInstance);
         }
 
         public void RemoveAbility(Ability ability)
@@ -109,6 +157,24 @@ namespace Abilities
         private void Update()
         {
             _stackTree.Update(Time.deltaTime);
+            foreach (var ability in _activeAbilities)
+            {
+                ability.Update();
+            }
+            UpdateCooldowns();
+        }
+
+        private void UpdateCooldowns()
+        {
+            for (int i = _cooldowns.Count - 1; i >= 0; i--)
+            {
+                Cooldown cooldown = _cooldowns[i];
+                cooldown.RemainingCooldown -= Time.deltaTime;
+                if (cooldown.RemainingCooldown <= 0)
+                {
+                    _cooldowns.RemoveAt(i);
+                }
+            }
         }
 
         public AttributeChangeListenerHandle RegisterAttributeChangeEvent(Attribute template, Action<AttributeChangePayload> callback)
@@ -149,6 +215,18 @@ namespace Abilities
             public T ReadNewValue<T>()
             {
                 return (T)NewValue;
+            }
+        }
+
+        private class Cooldown
+        {
+            public Ability Template;
+            public float RemainingCooldown;
+
+            public Cooldown(Ability template)
+            {
+                Template = template;
+                RemainingCooldown = template.Cooldown;
             }
         }
     }

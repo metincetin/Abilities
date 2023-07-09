@@ -7,6 +7,8 @@ namespace Abilities.Examples.Scripts
         public Effect DamageEffect;
         public Effect HealEffect;
 
+        public Ability TestAbility;
+
         // Update is called once per frame
         void Update()
         {
@@ -17,6 +19,13 @@ namespace Abilities.Examples.Scripts
             if (Input.GetKeyDown(KeyCode.E))
             {
                 GetComponent<AbilityComponent>().AddEffect(HealEffect);
+            }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                if (!GetComponent<AbilityComponent>().TryActivateAbility(TestAbility))
+                {
+                    Debug.Log("Could not activate ability");
+                }
             }
         }
     }
