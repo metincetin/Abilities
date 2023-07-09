@@ -25,6 +25,7 @@ namespace Abilities.Examples.Abilities
 
         protected override void OnEnded()
         {
+            RegisterCooldown();
             Debug.Log("Ability Ended!");
         }
 

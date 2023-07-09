@@ -18,6 +18,23 @@ namespace Abilities
         public abstract DurationType DurationType { get; }
 
         /// <summary>
+        /// Only one instance of this effect can be applied on a player. (Except for stacking)
+        /// </summary>
+        public abstract bool Unique { get; }
+
+        /// <summary>
+        /// How many times can this effect be stacked
+        /// </summary>
+        public abstract int MaxStack { get; }
+
+        public int Stack { get; private set; }
+
+
+        [SerializeField, Tooltip("Determines how adding new stack will behave.\nResetTime: Restarts the timer. Stack will need Duration seconds to pass to be removed\nResetPeriod: Period will be reset.\nIndividual: Makes the effect's lifetime stack number based. When effect duration is reached, it will remove a stack instead of removing whole effect")]
+        private StackingFlags _stackingFlags;
+        public StackingFlags StackingFlags => _stackingFlags;
+
+        /// <summary>
         /// How long this effect will stay on if DurationType is Durational
         /// </summary>
         [Tooltip("How long this effect will stay on if DurationType is Durational")]
@@ -48,6 +65,7 @@ namespace Abilities
         private string _destructionMessage;
 
 
+
         private Effect _template;
         public Effect Template => _template;
 
@@ -62,6 +80,7 @@ namespace Abilities
 
         internal void OnAdded_Internal()
         {
+            Stack = 1;
             CreateVisualEffect();
         }
 
@@ -114,6 +133,47 @@ namespace Abilities
         [Tooltip("Step that executions will be executed.")]
         public abstract float Period { get; }
 
+        public void AddStack()
+        {
+            if (Stack < MaxStack)
+            {
+                Stack++;
+                if (StackingFlags.HasFlag(StackingFlags.ResetTime))
+                {
+                    _time = 0;
+                }
+                if (StackingFlags.HasFlag(StackingFlags.ResetPeriod))
+                {
+                    _periodTime = 0;
+                    _periodIndex = 0;
+                }
+                OnStackAdded(Stack);
+            }
+        }
+
+        public void RemoveStack()
+        {
+            if (Stack > 0)
+            {
+                Stack--;
+                OnStackRemoved(Stack);
+            }
+        }
+
+        /// <summary>
+        /// Called when new stack added
+        /// </summary>
+        protected virtual void OnStackAdded(int stack)
+        {
+        }
+
+        /// <summary>
+        /// Called when stack removed
+        /// </summary>
+        protected virtual void OnStackRemoved(int stack)
+        {
+        }
+
         // /// <summary>
         // /// Initial delay for the first period to start
         // /// </summary>
@@ -148,6 +208,11 @@ namespace Abilities
                 }
             }
         }
+
+        public void ResetTime()
+        {
+            _time = 0;
+        }
     }
 
     public enum DurationType
@@ -161,5 +226,14 @@ namespace Abilities
         None,
         Destroy,
         Message
+    }
+
+    [System.Flags]
+    public enum StackingFlags
+    {
+        None = 0,
+        ResetTime = 1,
+        ResetPeriod = 4,
+        Individual = 8
     }
 }

@@ -60,7 +60,7 @@ namespace Abilities.Editor
             foreach (Effect effect in t.StackTree)
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.PrefixLabel(effect.name);
+                EditorGUILayout.PrefixLabel(effect.name + ((effect.Stack > 1) ? $"x{effect.Stack}" : ""));
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(effect.DurationType.ToString(), GUILayout.Width(64));

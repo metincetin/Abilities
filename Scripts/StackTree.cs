@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Abilities
 {
-	public class StackTree : IEnumerable
+    public class StackTree : IEnumerable
     {
         private List<Effect> _effects = new List<Effect>();
         private List<Effect> _removalQueue = new List<Effect>();
 
         public int ActiveEffectCount => _effects.Count;
 
-		public Effect Fetch(Effect effect)
+        public Effect Fetch(Effect effect)
         {
             return Fetch<Effect>(effect);
         }
-        public T Fetch<T>() where T: Effect
+        public T Fetch<T>() where T : Effect
         {
-            foreach(var e in _effects)
+            foreach (var e in _effects)
             {
                 if (e is T casted)
                 {
@@ -26,9 +27,9 @@ namespace Abilities
             }
             return null;
         }
-        public T Fetch<T>(Effect template) where T: Effect
+        public T Fetch<T>(Effect template) where T : Effect
         {
-            foreach(var e in _effects)
+            foreach (var e in _effects)
             {
                 if (e.Template == template && e is T casted)
                 {
@@ -40,13 +41,24 @@ namespace Abilities
 
         public void Add(Effect effect)
         {
-            _effects.Add(effect);
-            effect.OnAdded_Internal();
+            var existingEffect = Fetch(effect.Template);
+            if (existingEffect)
+            {
+                var hasAvailableStack = existingEffect.Stack + 1 <= existingEffect.MaxStack;
+                if (!hasAvailableStack) return;
+                if (existingEffect.Unique && !hasAvailableStack) return;
+                existingEffect.AddStack();
+            }
+            else
+            {
+                _effects.Add(effect);
+                effect.OnAdded_Internal();
+            }
         }
 
         public void Update(float delta)
         {
-            foreach(var e in _effects)
+            foreach (var e in _effects)
             {
                 e.UpdateTime(delta);
                 switch (e.DurationType)
@@ -66,7 +78,22 @@ namespace Abilities
                 {
                     if (e.Time >= e.Duration)
                     {
-                        _removalQueue.Add(e);
+                        if (e.StackingFlags.HasFlag(StackingFlags.Individual))
+                        {
+                            if (e.Stack > 0)
+                            {
+                                e.RemoveStack();
+                                e.ResetTime();
+                            }
+                            else
+                            {
+                                _removalQueue.Add(e);
+                            }
+                        }
+                        else
+                        {
+                            _removalQueue.Add(e);
+                        }
                     }
                 }
             }
@@ -86,10 +113,10 @@ namespace Abilities
             }
         }
 
-		public IEnumerator GetEnumerator()
-		{
+        public IEnumerator GetEnumerator()
+        {
             return _effects.GetEnumerator();
-		}
-	}
+        }
+    }
 }
 

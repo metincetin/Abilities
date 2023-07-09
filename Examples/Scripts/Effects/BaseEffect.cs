@@ -15,5 +15,14 @@ namespace Abilities.Examples.Scripts.Effects
 
         [SerializeField] private float _period;
         public override float Period => _period;
+
+        [SerializeField]
+        private int _maxStack;
+        public override int MaxStack => _maxStack;
+
+
+        [SerializeField]
+        private bool _unique;
+        public override bool Unique => _unique;
     }
 }

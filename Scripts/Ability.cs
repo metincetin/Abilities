@@ -59,12 +59,24 @@ namespace Abilities
         public void End()
         {
             Owner.RemoveAbility(this);
+            OnEnded();
+        }
+
+        /// <summary>
+        /// Registers cooldown to its owner, so it cannot be activated again until cooldown is complete
+        /// </summary>
+        protected void RegisterCooldown()
+        {
             if (Cooldown > 0)
             {
                 Owner.AddCooldown(Template);
             }
-            OnEnded();
         }
+
+        /// <summary>
+        /// Syntactic sugar for Owner.StartCoroutine
+        /// </summary>
+        protected Coroutine StartCoroutine(System.Collections.IEnumerator coroutine) => Owner.StartCoroutine(coroutine);
 
         public void Update()
         {

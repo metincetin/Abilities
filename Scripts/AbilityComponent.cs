@@ -152,6 +152,7 @@ namespace Abilities
             }
         }
 
+
         public void RemoveEffect(Effect effect) { }
 
         private void Update()
@@ -179,6 +180,7 @@ namespace Abilities
 
         public AttributeChangeListenerHandle RegisterAttributeChangeEvent(Attribute template, Action<AttributeChangePayload> callback)
         {
+            Debug.Assert(template, "Template should not be null");
             var handle = new AttributeChangeListenerHandle();
             handle.Callback = callback;
             handle.Template = template;
