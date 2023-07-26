@@ -1,15 +1,25 @@
+using Abilities.Examples.Scripts.Effects;
 using UnityEngine;
 
-namespace Abilities.Examples.Scripts.Effects
+namespace Abilities.Examples.Effects
 {
-    public class DamageEffect : Effect
+    public class DamageEffect : BaseEffect
     {
-        public override DurationType DurationType { get; }
-        public override float Duration { get; }
-        public override float Period { get; }
 
-        public override int MaxStack { get; }
+        [SerializeField]
+        private float _damage;
 
-        public override bool Unique { get; }
+        [SerializeField]
+        private FloatAttribute _targetAttribute;
+        public override bool Once => true;
+        
+        protected override void OnExecuted()
+        {
+            var attr = Applied.AttributeSet.GetAttributeFromTemplate<FloatAttribute>(_targetAttribute);
+            if (attr)
+            {
+                attr.Value -= _damage;
+            }
+        }
     }
 }

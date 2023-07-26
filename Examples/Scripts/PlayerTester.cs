@@ -7,6 +7,9 @@ namespace Abilities.Examples.Scripts
     {
         [SerializeField]
         private Attribute _healthAttribute;
+        [SerializeField]
+        private Attribute _maxHealthAttribute;
+        
         public Effect DamageEffect;
         public Effect HealEffect;
         public Effect PoisonEffect;
@@ -29,6 +32,12 @@ namespace Abilities.Examples.Scripts
         private void OnDisable()
         {
             _abilityComponent.UnregisterAttributeChangeEvent(_healthChangedEventHandle);
+        }
+
+        private void Start()
+        {
+            _abilityComponent.AttributeSet.GetAttribute<HealthAttribute>().Value = _abilityComponent.AttributeSet
+                .GetAttributeFromTemplate<FloatAttribute>(_maxHealthAttribute).Value;
         }
 
         private void OnHealthValueChanged(AbilityComponent.AttributeChangePayload payload)

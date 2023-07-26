@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f1b2888c584b889402fe3dad00a053, type: 3}
+  m_Script: {fileID: 11500000, guid: ddc604d18f8d8701794991f43409279f, type: 3}
   m_Name: PoisonEffect
   m_EditorClassIdentifier: 
   _stackingFlags: 8
@@ -17,10 +17,10 @@ MonoBehaviour:
     type: 3}
   _visualDestructionHandling: 1
   _destructionMessage: 
-  executions:
-  - {fileID: 11400000, guid: ce618148c1f65428083d602f798af48d, type: 2}
   _durationType: 1
   _duration: 5
-  _period: 0.5
-  _maxStack: 5
+  _period: 1
+  _maxStack: 1
   _unique: 0
+  _once: 0
+  Damage: 100

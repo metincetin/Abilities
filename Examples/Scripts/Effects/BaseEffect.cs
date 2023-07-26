@@ -24,5 +24,13 @@ namespace Abilities.Examples.Scripts.Effects
         [SerializeField]
         private bool _unique;
         public override bool Unique => _unique;
+
+        [SerializeField]
+        private bool _once;
+        public override bool Once => _once;
+        protected override void OnExecuted()
+        {
+            
+        }
     }
 }

@@ -2,7 +2,8 @@ using UnityEngine;
 
 namespace Abilities.Examples
 {
-	public class FloatAttribute : Attribute<float>
-	{
-	}
+    [CreateAssetMenu(menuName = "Examples/Attributes/GenericFloat")]
+    public class FloatAttribute : Attribute<float>
+    {
+    }
 }

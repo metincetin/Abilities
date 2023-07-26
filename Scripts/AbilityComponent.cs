@@ -40,6 +40,7 @@ namespace Abilities
         private void OnAttributeGenericValueChanged(Attribute template, object newValue, object previousValue)
         {
             var payload = new AttributeChangePayload { NewValue = newValue, PreviousValue = previousValue };
+            if (newValue == previousValue) return;
             if (_attributeChangeListeners.ContainsKey(template))
             {
                 _attributeChangeListeners[template]?.Invoke(payload);

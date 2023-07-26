@@ -9,12 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94f1b2888c584b889402fe3dad00a053, type: 3}
+  m_Script: {fileID: 11500000, guid: 06601dc6ca4424172ad47f45769a1cf7, type: 3}
   m_Name: DamageEffect
   m_EditorClassIdentifier: 
-  executions:
-  - {fileID: 11400000, guid: ce618148c1f65428083d602f798af48d, type: 2}
+  _stackingFlags: 0
+  _targetVisual: {fileID: 0}
+  _visualDestructionHandling: 1
+  _destructionMessage: 
   _durationType: 0
-  _duration: 2
+  _duration: 0
   _period: 0
-  _periodDelay: 0
+  _maxStack: 0
+  _unique: 0
+  _once: 0
+  _damage: 50
+  _targetAttribute: {fileID: 11400000, guid: d61a11cb770fd4a5a834d29618e46a44, type: 2}

@@ -9,19 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f7f73ae3da064e37b8b1c74a75eb40b, type: 3}
-  m_Name: HealEffect
+  m_Script: {fileID: 11500000, guid: c91e0c700394e049d8b3ceac6b6f7799, type: 3}
+  m_Name: SlowEffect
   m_EditorClassIdentifier: 
   _stackingFlags: 0
-  _targetVisual: {fileID: 1167189899449453827, guid: fd47e1f8f02b7506093e8aad08e21114,
-    type: 3}
+  _targetVisual: {fileID: 0}
   _visualDestructionHandling: 1
   _destructionMessage: 
-  executions:
-  - {fileID: 11400000, guid: 2032ce853dc004b588a11b1a6e7b49b1, type: 2}
   _durationType: 1
-  _duration: 1
-  _period: 0.2
-  _maxStack: 0
+  _duration: 5
+  _period: 0
+  _maxStack: 5
   _unique: 0
-  _once: 0
+  _once: 1
+  _slowMultiplierPerStack: 0.2
+  _targetAttribute: {fileID: 11400000, guid: 8a9bbf0398ed0ad5483aed7c2aea95ba, type: 2}

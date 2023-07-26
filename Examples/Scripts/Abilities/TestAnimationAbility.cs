@@ -20,7 +20,7 @@ namespace Abilities.Examples.Abilities
 
         private IEnumerator PlayAnimation()
         {
-            yield return new PlayAndWaitAnimationTime(Owner.GetComponentInChildren<Animator>(), 1f, new AnimationPlayOptions{ StateName = _animationStateName});
+            yield return new PlayAndWaitAnimation(Owner.GetComponentInChildren<Animator>(), 1f, new AnimationPlayOptions{ StateName = _animationStateName});
             Debug.Log("Attaaack!");
 
             RegisterCooldown();

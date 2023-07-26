@@ -80,7 +80,7 @@ namespace Abilities
                     {
                         if (e.StackingFlags.HasFlag(StackingFlags.Individual))
                         {
-                            if (e.Stack > 0)
+                            if (e.Stack > 1)
                             {
                                 e.RemoveStack();
                                 e.ResetTime();

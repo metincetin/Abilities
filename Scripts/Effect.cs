@@ -41,6 +41,16 @@ namespace Abilities
         public abstract float Duration { get; }
 
         /// <summary>
+        /// Step that this effect will be executed
+        /// </summary>
+        public abstract float Period { get; }
+
+        /// <summary>
+        /// If true, this effect will be executed once.
+        /// </summary>
+        public abstract bool Once { get; }
+
+        /// <summary>
         /// AbilityComponent that this effect is applied to
         /// </summary>
         [Tooltip("AbilityComponent that this effect is applied to")]
@@ -81,7 +91,9 @@ namespace Abilities
         internal void OnAdded_Internal()
         {
             Stack = 1;
+            OnStackAdded(Stack);
             CreateVisualEffect();
+            OnAdded();
         }
 
         private void CreateVisualEffect()
@@ -96,8 +108,9 @@ namespace Abilities
 
         internal void OnRemoved_Internal()
         {
+            OnStackRemoved(Stack);
+            OnRemoved();
             if (_targetVisualInstance)
-
             {
                 switch (_visualDestructionHandling)
                 {
@@ -114,11 +127,8 @@ namespace Abilities
             }
         }
 
-        /// <summary>
-        /// Behaviour to be executed when this effect is applied
-        /// </summary>
-        [SerializeField, Tooltip("Behaviour to be executed when this effect is applied")]
-        private List<Execution> executions = new List<Execution>();
+        protected virtual void OnRemoved(){}
+        protected virtual void OnAdded(){}
 
         private float _time;
         public float Time => _time;
@@ -127,11 +137,7 @@ namespace Abilities
         private int _periodIndex;
         private GameObject _targetVisualInstance;
 
-        /// <summary>
-        /// Step that executions will be executed.
-        /// </summary>
-        [Tooltip("Step that executions will be executed.")]
-        public abstract float Period { get; }
+        private bool _executed;
 
         public void AddStack()
         {
@@ -186,11 +192,12 @@ namespace Abilities
         [Tooltip("Executes the executions")]
         public void Execute()
         {
-            foreach (var execution in executions)
-            {
-                execution.Execute(this);
-            }
+            if (Once && _executed) return;
+            OnExecuted();
+            _executed = true;
         }
+
+        protected abstract void OnExecuted();
 
 
         public void UpdateTime(float delta)

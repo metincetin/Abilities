@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20ef5ca92a377ef1b9135b5af9cd75f5, type: 3}
-  m_Name: TestAnimationAbility
+  m_Script: {fileID: 11500000, guid: e4d1efb4aec7b0d21bbbcb5f90f20ad2, type: 3}
+  m_Name: SlowExecution
   m_EditorClassIdentifier: 
-  _animationStateName: Attack
+  MovementSpeedMultiplier: 0.2
+  MovementSpeedAttribute: {fileID: 11400000, guid: 8a9bbf0398ed0ad5483aed7c2aea95ba,
+    type: 2}

@@ -17,13 +17,13 @@ namespace Abilities
         }
     }
 
-    public class PlayAndWaitAnimationTime : CustomYieldInstruction
+    public class PlayAndWaitAnimation : CustomYieldInstruction
     {
         public override bool keepWaiting => Time.time >= EndTime;
 
         public float EndTime { get; }
 
-        public PlayAndWaitAnimationTime(Animator animationTarget, float time, AnimationPlayOptions options, bool normalizedTime = false)
+        public PlayAndWaitAnimation(Animator animationTarget, float time, AnimationPlayOptions options, bool normalizedTime = false)
         {
             animationTarget.CrossFade(options.StateName, options.NormalizedTransitionDuration, options.Layer, options.NormalizedTimeOffset);
             this.EndTime = Time.time + (normalizedTime ? animationTarget.GetCurrentAnimatorStateInfo(options.Layer).length * time : time);
