@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Abilities.Attributes;
 using UnityEngine;
 
 namespace Abilities.Examples.Scripts.Executions

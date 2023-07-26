@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Abilities.Attributes;
+using UnityEngine;
 namespace Abilities.Examples
 {
     [CreateAssetMenu(menuName = "Examples/Attributes/HealthAttribute")]
