@@ -16,9 +16,15 @@ namespace Abilities
             for (int i = 0; i < _attributes.Length; i++)
             {
                 Attribute a = _attributes[i];
-				var n = a.CreateInstance();
+				var n = a.CreateInstance(this);
                 n.name = a.name;
                 _attributes[i] = n;
+            }
+
+            for (int i = 0; i < _attributes.Length; i++)
+            {
+                Attribute a = _attributes[i];
+                a.OnReady();
             }
         }
 
