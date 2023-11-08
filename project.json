@@ -1,0 +1,10 @@
+{
+	"name": "org.metin.abilities",
+	"version": "0.1.0",
+	"description": "Ability system",
+	"displayName":"Abilities",
+	"author:{
+		"name": "Metin Çetin",
+		"email":"metinc309@gmail.com"
+	}
+}
