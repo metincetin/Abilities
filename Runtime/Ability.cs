@@ -41,7 +41,8 @@ namespace Abilities
         /// </summary>
         public virtual bool CanBeActivated(AbilityComponent owner)
         {
-            return owner.GetCooldown(this) <= 0;
+            Debug.Log(owner.GetCooldownRemaining(this));
+            return owner.GetCooldownRemaining(this) <= 0;
         }
 
 
@@ -59,6 +60,7 @@ namespace Abilities
         public void End()
         {
             Owner.RemoveAbility(this);
+            RegisterCooldown();
             OnEnded();
         }
 

@@ -8,8 +8,8 @@ namespace Abilities
     public class AbilityComponent : MonoBehaviour
     {
         private List<Ability> _activeAbilities = new List<Ability>();
-        private StackTree _stackTree = new StackTree();
-        public StackTree StackTree => _stackTree;
+        private EffectStack _effectStack = new EffectStack();
+        public EffectStack EffectStack => _effectStack;
 
         private List<Cooldown> _cooldowns = new List<Cooldown>();
 
@@ -86,8 +86,23 @@ namespace Abilities
 
             _cooldowns.Add(new Cooldown(template));
         }
+        
+        public float GetCooldownPercentage(Ability template)
+        {
+            if (!template.IsTemplate)
+            {
+                template = template.Template;
+            }
 
-        public float GetCooldown(Ability template)
+            foreach(var c in _cooldowns)
+            {
+                if (c.Template != template) continue;
+                return c.RemainingCooldown / c.StartDuration;
+            }
+            return 0;
+        }
+        
+        public float GetCooldownRemaining(Ability template)
         {
             if (!template.IsTemplate)
             {
@@ -105,8 +120,8 @@ namespace Abilities
         private void ActivateAbility(Ability ability)
         {
             var abilityInstance = ability.Instantiate(this);
-            abilityInstance.Activate();
             _activeAbilities.Add(abilityInstance);
+            abilityInstance.Activate();
         }
 
         public void RemoveAbility(Ability ability)
@@ -149,16 +164,18 @@ namespace Abilities
             }
             else
             {
-                _stackTree.Add(inst);
+                _effectStack.Add(inst);
             }
         }
 
 
-        public void RemoveEffect(Effect effect) { }
+        public void RemoveEffect(Effect effect) {
+            _effectStack.Remove(effect);
+        }
 
         private void Update()
         {
-            _stackTree.Update(Time.deltaTime);
+            _effectStack.Update(Time.deltaTime);
             foreach (var ability in _activeAbilities)
             {
                 ability.Update();
@@ -225,11 +242,13 @@ namespace Abilities
         {
             public Ability Template;
             public float RemainingCooldown;
+            public float StartDuration;
 
             public Cooldown(Ability template)
             {
                 Template = template;
                 RemainingCooldown = template.Cooldown;
+                StartDuration = RemainingCooldown;
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Abilities.Editor
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel(ability.name);
 
-                var cooldown = t.GetCooldown(ability.Template);
+                var cooldown = t.GetCooldownRemaining(ability.Template);
                 if (cooldown > 0)
                 {
                     EditorGUILayout.LabelField(cooldown.ToString());
@@ -55,9 +55,9 @@ namespace Abilities.Editor
         private void DrawStackTree(AbilityComponent t)
         {
             EditorGUILayout.LabelField("Stack Tree");
-            EditorGUILayout.LabelField($"Active Effects: {t.StackTree.ActiveEffectCount}");
+            EditorGUILayout.LabelField($"Active Effects: {t.EffectStack.ActiveEffectCount}");
             EditorGUI.indentLevel++;
-            foreach (Effect effect in t.StackTree)
+            foreach (Effect effect in t.EffectStack)
             {
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.PrefixLabel(effect.name + ((effect.Stack > 1) ? $"x{effect.Stack}" : ""));

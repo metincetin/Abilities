@@ -2,7 +2,6 @@
 using System.Collections;
 using System;
 using UnityEngine.UIElements;
-using TMPro;
 
 namespace Abilities
 {
