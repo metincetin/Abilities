@@ -26,8 +26,6 @@ namespace Abilities
         public Ability Template => _template;
 
 
-
-
         public Ability Instantiate(AbilityComponent owner)
         {
             var inst = Instantiate(this);
@@ -41,7 +39,6 @@ namespace Abilities
         /// </summary>
         public virtual bool CanBeActivated(AbilityComponent owner)
         {
-            Debug.Log(owner.GetCooldownRemaining(this));
             return owner.GetCooldownRemaining(this) <= 0;
         }
 
@@ -59,6 +56,7 @@ namespace Abilities
         /// </summary>
         public void End()
         {
+            if (IsTemplate) throw new InvalidOperationException("Attempted to end a template ability. This is not allowed");
             Owner.RemoveAbility(this);
             RegisterCooldown();
             OnEnded();

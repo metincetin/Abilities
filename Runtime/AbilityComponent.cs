@@ -128,13 +128,35 @@ namespace Abilities
         {
             if (ability.Owner != this) return;
             if (_activeAbilities.Remove(ability))
+            {
                 Destroy(ability);
+            }
+        }
+        public void RemoveAbilityTemplate(Ability ability)
+        {
+            var ab = GetAbility(ability);
+            if (ab) { RemoveAbility(ability); }
+        }
+
+        public T GetAbility<T>() where T: Ability
+        {
+            foreach(var a in _activeAbilities){
+                if (a is T t)
+                {
+                    return t;
+                }
+            }
+            return default(T);
         }
 
         public Ability GetAbility(Ability ability)
         {
             foreach (var a in _activeAbilities)
             {
+                if (ability.IsTemplate && ability == a.Template)
+                {
+                    return a;
+                }
                 if (ability.Template == a.Template)
                 {
                     return a;
