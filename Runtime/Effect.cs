@@ -68,6 +68,12 @@ namespace Abilities
         [SerializeField, Tooltip("Visual that is added to the target")]
         private GameObject _targetVisual;
 
+        /// <summary>
+        /// Offset the visual effect will be created with
+        /// </summary>
+        [SerializeField, Tooltip("Offset the visual effect will be created with")]
+        private Vector3 _targetVisualOffset;
+
         [SerializeField, Tooltip("Handles how visual destruction will be handled.\nNone: No destruction will happen. You'll have to manually control its lifetime after it's added.\nDestroy: Visual will be destroyed after effect is removed.\nMessage: Message will be send when effect is removed.")]
         private VisualDestructionHandling _visualDestructionHandling = VisualDestructionHandling.Destroy;
 
@@ -101,7 +107,7 @@ namespace Abilities
             if (_targetVisual)
             {
                 var inst = Instantiate(_targetVisual, Applied.transform);
-                inst.transform.localPosition = Vector3.zero;
+                inst.transform.localPosition = _targetVisualOffset;
                 _targetVisualInstance = inst;
             }
         }

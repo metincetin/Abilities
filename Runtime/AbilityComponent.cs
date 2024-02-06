@@ -20,6 +20,9 @@ namespace Abilities
 
         private Dictionary<Attribute, Action<AttributeChangePayload>> _attributeChangeListeners = new Dictionary<Attribute, Action<AttributeChangePayload>>();
 
+        public event Action<Effect> EffectAdded;
+        public event Action<Effect> EffectRemoved;
+
         private void Awake()
         {
             _attributeSet = Instantiate(_attributeSet);
@@ -177,9 +180,9 @@ namespace Abilities
             return false;
         }
 
-        public void AddEffect(Effect effect)
+        public void AddEffect(Effect effect, AbilityComponent applier = null)
         {
-            var inst = effect.Instantiate(this, null);
+            var inst = effect.Instantiate(this, applier);
             if (inst.DurationType == DurationType.Instant)
             {
                 inst.Execute();
@@ -188,11 +191,13 @@ namespace Abilities
             {
                 _effectStack.Add(inst);
             }
+            EffectAdded?.Invoke(effect);
         }
 
 
         public void RemoveEffect(Effect effect) {
             _effectStack.Remove(effect);
+            EffectRemoved?.Invoke(effect);
         }
 
         private void Update()
