@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Abilities
 {
+    [DefaultExecutionOrder(-100)]
     public class AbilityComponent : MonoBehaviour
     {
         private List<Ability> _activeAbilities = new List<Ability>();
@@ -16,6 +16,8 @@ namespace Abilities
         [SerializeField]
         private AttributeSet _attributeSet;
         public AttributeSet AttributeSet => _attributeSet;
+
+        private TagContainer _tags = new TagContainer();
 
 
         private Dictionary<Attribute, Action<AttributeChangePayload>> _attributeChangeListeners = new Dictionary<Attribute, Action<AttributeChangePayload>>();
@@ -50,15 +52,24 @@ namespace Abilities
             }
         }
 
-        public bool TryActivateAbility(Ability template)
+        public bool TryActivateAbility(Ability template, object payload = null)
         {
             if (GetActiveAbilityInstanceOfTemplate(template)) return false;
             if (template.CanBeActivated(this))
             {
-                ActivateAbility(template);
+                ActivateAbility(template, payload);
                 return true;
             }
             return false;
+        }
+
+        private void OnDestroy()
+        {
+            for (var i = _activeAbilities.Count - 1; i >= 0; i--)
+            {
+                var ability = _activeAbilities[i];
+                RemoveAbility(ability);
+            }
         }
 
         private Ability GetActiveAbilityInstanceOfTemplate(Ability template)
@@ -71,8 +82,9 @@ namespace Abilities
             return null;
         }
 
-        public void AddCooldown(Ability template)
+        public void AddCooldown(Ability template, float cooldown)
         {
+            
             if (!template.IsTemplate)
             {
                 template = template.Template;
@@ -87,7 +99,32 @@ namespace Abilities
                 }
             }
 
-            _cooldowns.Add(new Cooldown(template));
+            _cooldowns.Add(new Cooldown(template, cooldown));
+        }
+        
+        public void AddCooldown(Ability template)
+        {
+            AddCooldown(template, template.Cooldown);
+        }
+
+        public void AddTag(string tag)
+        {
+            _tags.Add(tag);
+
+            foreach (Effect ef in EffectStack)
+            {
+                if (ef.RemovalTags.Contains(tag))
+                {
+                    RemoveEffect(ef);
+                    break;
+                }
+            }
+        }
+
+        public void RemoveTag(string tag) => _tags.Remove(tag);
+        public bool HasTag(string tag)
+        {
+            return _tags.Contains(tag);
         }
         
         public float GetCooldownPercentage(Ability template)
@@ -120,9 +157,10 @@ namespace Abilities
             return 0;
         }
 
-        private void ActivateAbility(Ability ability)
+        private void ActivateAbility(Ability ability, object payload = null)
         {
             var abilityInstance = ability.Instantiate(this);
+            abilityInstance.Payload = payload;
             _activeAbilities.Add(abilityInstance);
             abilityInstance.Activate();
         }
@@ -168,6 +206,16 @@ namespace Abilities
             return null;
         }
 
+        public bool HasActiveAbilityOfType<T>() where T: Ability
+        {
+            foreach (var a in _activeAbilities)
+            {
+                if (a is T) return true;
+            }
+
+            return false;
+        }
+        
         public bool HasActiveAbility(Ability ability)
         {
             foreach (var a in _activeAbilities)
@@ -182,6 +230,7 @@ namespace Abilities
 
         public void AddEffect(Effect effect, AbilityComponent applier = null)
         {
+            if (effect.ActivationPreventationTags.ContainsAny(_tags)) return;
             var inst = effect.Instantiate(this, applier);
             if (inst.DurationType == DurationType.Instant)
             {
@@ -271,12 +320,17 @@ namespace Abilities
             public float RemainingCooldown;
             public float StartDuration;
 
-            public Cooldown(Ability template)
+            public Cooldown(Ability template, float cooldown)
             {
                 Template = template;
-                RemainingCooldown = template.Cooldown;
+                RemainingCooldown = cooldown;
                 StartDuration = RemainingCooldown;
             }
+        }
+
+        public void MergeTags(TagContainer tags)
+        {
+            _tags.Merge(tags);
         }
     }
 }

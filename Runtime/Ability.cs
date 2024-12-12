@@ -10,6 +10,8 @@ namespace Abilities
     {
         public AbilityComponent Owner { get; private set; }
 
+        public virtual bool AllowMultipleApplication { get; } = false;
+
         /// <summary>
         /// Cooldown duration for this ability to be casted again
         /// </summary>
@@ -24,6 +26,10 @@ namespace Abilities
         /// Represents the scriptable object that this ability instantiated from.
         /// </summary>
         public Ability Template => _template;
+
+        public object Payload { get; set; }
+
+        public T GetPayload<T>() => (T)Payload;
 
 
         public Ability Instantiate(AbilityComponent owner)
@@ -69,7 +75,7 @@ namespace Abilities
         {
             if (Cooldown > 0)
             {
-                Owner.AddCooldown(Template);
+                Owner.AddCooldown(Template, Cooldown);
             }
         }
 

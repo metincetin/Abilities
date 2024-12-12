@@ -56,6 +56,10 @@ namespace Abilities
         [Tooltip("AbilityComponent that this effect is applied to")]
         public AbilityComponent Applied { get; private set; }
 
+        [SerializeField, Tooltip("Tags to be applied once registered")]
+        private TagContainer _tags;
+        public TagContainer Tags => _tags;
+
         /// <summary>
         /// AbilityComponent that this effect is applied by
         /// </summary>
@@ -80,6 +84,17 @@ namespace Abilities
         [SerializeField, Tooltip("Message to be sent to visual instance when effect is removed. Used with VisualDestructionHandling.Message")]
         private string _destructionMessage;
 
+        [SerializeField, Tooltip("Tags that will prevent activation of the effect if applied has any")]
+        private TagContainer _activationPreventationTags;
+        public TagContainer ActivationPreventationTags => _activationPreventationTags;
+
+        [SerializeField, Tooltip("Tags that will pause this effect while active. Effect will preserve its duration.")]
+        private TagContainer _executionPausingTags;
+        
+        [SerializeField, Tooltip("Tags that will automatically remove this effect once added")]
+        private TagContainer _removalTags;
+        public TagContainer RemovalTags => _removalTags;
+
 
 
         private Effect _template;
@@ -99,6 +114,7 @@ namespace Abilities
             Stack = 1;
             OnStackAdded(Stack);
             CreateVisualEffect();
+            Applied.MergeTags(Tags);
             OnAdded();
         }
 
@@ -198,6 +214,11 @@ namespace Abilities
         [Tooltip("Executes the executions")]
         public void Execute()
         {
+            foreach (var tag in _executionPausingTags)
+            {
+                if (Applied.HasTag(tag)) return;
+            }
+            
             if (Once && _executed) return;
             OnExecuted();
             _executed = true;

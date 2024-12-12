@@ -22,13 +22,12 @@ namespace Abilities.Editor
             DrawAttributes(t);
             DrawActiveAbilities(t);
             DrawStackTree(t);
-
-
+            DrawTags(t);
         }
 
         private void DrawActiveAbilities(AbilityComponent t)
         {
-            EditorGUILayout.LabelField("Active Abilities");
+            DrawHeader("Active Abilities");
 
             EditorGUI.indentLevel++;
 
@@ -47,6 +46,11 @@ namespace Abilities.Editor
                 {
                     EditorGUILayout.LabelField(cooldown.ToString());
                 }
+
+                if (GUILayout.Button("End"))
+                {
+                    ability.End();
+                }
                 EditorGUILayout.EndHorizontal();
             }
             EditorGUI.indentLevel--;
@@ -54,7 +58,8 @@ namespace Abilities.Editor
 
         private void DrawStackTree(AbilityComponent t)
         {
-            EditorGUILayout.LabelField("Stack Tree");
+            DrawHeader("Stack Tree");
+
             EditorGUILayout.LabelField($"Active Effects: {t.EffectStack.ActiveEffectCount}");
             EditorGUI.indentLevel++;
             foreach (Effect effect in t.EffectStack)
@@ -73,7 +78,7 @@ namespace Abilities.Editor
 
         private void DrawAttributes(AbilityComponent t)
         {
-            EditorGUILayout.LabelField("Attributes");
+            DrawHeader("Attributes");
             EditorGUI.indentLevel++;
 
             foreach (Attribute attr in t.AttributeSet)
@@ -94,6 +99,37 @@ namespace Abilities.Editor
                 }
             }
             EditorGUI.indentLevel--;
+        }
+
+        private void DrawTags(AbilityComponent t)
+        {
+
+            var type = t.GetType();
+            var field = type.GetField("_tags", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var tagContainer = field.GetValue(t) as TagContainer;
+
+            Dictionary<string, int> tags = new Dictionary<string, int>();
+
+            foreach(var tag in tagContainer)
+            {
+                if (tags.ContainsKey(tag)) tags[tag]++;
+                else
+                tags.Add(tag, 1);
+            }
+
+            EditorGUILayout.LabelField("Tags");
+
+            EditorGUI.indentLevel++;
+            foreach(var pair in tags)
+            {
+                EditorGUILayout.LabelField($"{pair.Key} ({pair.Value})");
+            }
+            EditorGUI.indentLevel--;
+        }
+
+        private void DrawHeader(string text)
+        {
+            GUILayout.Box(text, EditorStyles.toolbarButton);
         }
     }
 }
